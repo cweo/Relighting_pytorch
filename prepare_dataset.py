@@ -4,7 +4,7 @@ import os
 import shutil
 import argparse
 
-# Use example: python .\prepare_dataset.py --folder 'data/scene_castle' 
+# Use example: python .\prepare_dataset.py --folder './data/train/scene_abandonned_city_54/'
 
 parser = argparse.ArgumentParser(description='Explode the dataset folder into sub directories for each illuminant.')
 parser.add_argument('--folder', type=str, help='Dataset folder path.', required=True)
@@ -15,7 +15,7 @@ args = parser.parse_args()
 folder_path = args.folder
 files = []
 for i in os.listdir(folder_path):
-    if os.path.isfile(os.path.join(folder_path,i)) and 'Dataset' in i:
+    if os.path.isfile(os.path.join(folder_path,i)) and 'dataset' in i:
         files.append(i)
 
 dataset = pd.read_csv(os.path.join(folder_path, files[0]))
