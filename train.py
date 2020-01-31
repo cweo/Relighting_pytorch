@@ -89,7 +89,7 @@ if __name__ == '__main__':
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
                     transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5)) ]
-    dataloader = DataLoader(ImageDataset(opt.dataroot, transforms_=transforms_, unaligned=True), 
+    dataloader = DataLoader(ImageDataset(opt.dataroot, transforms_=transforms_, unaligned=False), 
                             batch_size=opt.batchSize, shuffle=True, num_workers=opt.n_cpu)
 
     # Loss plot
