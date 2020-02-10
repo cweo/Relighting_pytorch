@@ -7,9 +7,11 @@ from torchvision.utils import save_image
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
 import torch
+from PIL import Image
 
 from models import Generator
 from datasets import ImageDataset
+from utils import get_concat_h
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchSize', type=int, default=1, help='size of the batches')
@@ -32,6 +34,13 @@ if torch.cuda.is_available() and not opt.cuda:
 netG_A2B = Generator(opt.input_nc, opt.output_nc)
 netG_B2A = Generator(opt.output_nc, opt.input_nc)
 
+# Multi GPU
+if torch.cuda.device_count() > 1:
+        # export CUDA_VISIBLE_DEVICES=0,1 to use only 2 gpus
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        netG_A2B = torch.nn.DataParallel(netG_A2B)
+        netG_B2A = torch.nn.DataParallel(netG_B2A)
+
 if opt.cuda:
     netG_A2B.cuda()
     netG_B2A.cuda()
@@ -50,7 +59,8 @@ input_A = Tensor(opt.batchSize, opt.input_nc, opt.size, opt.size)
 input_B = Tensor(opt.batchSize, opt.output_nc, opt.size, opt.size)
 
 # Dataset loader
-transforms_ = [ transforms.ToTensor(),
+transforms_ = [ transforms.Resize(opt.size, Image.BICUBIC),
+                transforms.ToTensor(),
                 transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5)) ]
 dataloader = DataLoader(ImageDataset(opt.dataroot, transforms_=transforms_, mode='test'), 
                         batch_size=opt.batchSize, shuffle=False, num_workers=opt.n_cpu)
@@ -64,6 +74,7 @@ if not os.path.exists('output/A'):
 if not os.path.exists('output/B'):
     os.makedirs('output/B')
 
+
 for i, batch in enumerate(dataloader):
     # Set model input
     real_A = Variable(input_A.copy_(batch['A']))
@@ -72,10 +83,11 @@ for i, batch in enumerate(dataloader):
     # Generate output
     fake_B = 0.5*(netG_A2B(real_A).data + 1.0)
     fake_A = 0.5*(netG_B2A(real_B).data + 1.0)
-
-    # Save image files
+    
+    # Save concatenate image
     save_image(fake_A, 'output/A/%04d.png' % (i+1))
     save_image(fake_B, 'output/B/%04d.png' % (i+1))
+    
 
     sys.stdout.write('\rGenerated images %04d of %04d' % (i+1, len(dataloader)))
 

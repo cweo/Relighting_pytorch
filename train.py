@@ -1,5 +1,6 @@
 import argparse
 import itertools
+from pathlib import Path
 
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
@@ -42,21 +43,37 @@ if __name__ == '__main__':
 
     ###### Definition of variables ######
     # Networks
+    
     netG_A2B = Generator(opt.input_nc, opt.output_nc)
     netG_B2A = Generator(opt.output_nc, opt.input_nc)
     netD_A = Discriminator(opt.input_nc)
     netD_B = Discriminator(opt.output_nc)
+    
+    # Multi GPU
+    if torch.cuda.device_count() > 1:
+        # export CUDA_VISIBLE_DEVICES=0,1 to use only 2 gpus
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        netG_A2B = torch.nn.DataParallel(netG_A2B)
+        netG_B2A = torch.nn.DataParallel(netG_B2A)
+        netD_A = torch.nn.DataParallel(netD_A)
+        netD_B = torch.nn.DataParallel(netD_B)
 
     if opt.cuda:
         netG_A2B.cuda()
         netG_B2A.cuda()
         netD_A.cuda()
         netD_B.cuda()
-
-    netG_A2B.apply(weights_init_normal)
-    netG_B2A.apply(weights_init_normal)
-    netD_A.apply(weights_init_normal)
-    netD_B.apply(weights_init_normal)
+        
+    if opt.epoch > 0:
+        netG_A2B.load_state_dict(torch.load('output/netG_A2B.pth'))
+        netG_B2A.load_state_dict(torch.load('output/netG_B2A.pth'))
+        netD_A.load_state_dict(torch.load('output/netD_A.pth'))
+        netD_B.load_state_dict(torch.load('output/netD_B.pth'))        
+    else:
+        netG_A2B.apply(weights_init_normal)
+        netG_B2A.apply(weights_init_normal)
+        netD_A.apply(weights_init_normal)
+        netD_B.apply(weights_init_normal)
 
     # Lossess
     criterion_GAN = torch.nn.MSELoss()
@@ -89,8 +106,9 @@ if __name__ == '__main__':
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
                     transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5)) ]
-    dataloader = DataLoader(ImageDataset(opt.dataroot, transforms_=transforms_, unaligned=False), 
-                            batch_size=opt.batchSize, shuffle=True, num_workers=opt.n_cpu)
+    dataloader = DataLoader(ImageDataset(opt.dataroot, transforms_=transforms_, unaligned=True), 
+                            batch_size=opt.batchSize, shuffle=True, num_workers=opt.n_cpu,
+                            drop_last=True)
 
     # Loss plot
     logger = Logger(opt.n_epochs, len(dataloader))
@@ -184,8 +202,9 @@ if __name__ == '__main__':
         lr_scheduler_G.step()
         lr_scheduler_D_A.step()
         lr_scheduler_D_B.step()
-
+        
         # Save models checkpoints
+        Path("./output/").mkdir(parents=True, exist_ok=True)
         torch.save(netG_A2B.state_dict(), 'output/netG_A2B.pth')
         torch.save(netG_B2A.state_dict(), 'output/netG_B2A.pth')
         torch.save(netD_A.state_dict(), 'output/netD_A.pth')
