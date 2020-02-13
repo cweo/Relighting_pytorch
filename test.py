@@ -8,10 +8,12 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable
 import torch
 from PIL import Image
+from math import log10
 
 from models import Generator
 from datasets import ImageDataset
 from utils import get_concat_h
+import pytorch_ssim
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchSize', type=int, default=1, help='size of the batches')
@@ -74,6 +76,12 @@ if not os.path.exists('output/A'):
 if not os.path.exists('output/B'):
     os.makedirs('output/B')
 
+ssim_fake_A = 0
+ssim_fake_B = 0
+avg_psnr_A = 0
+avg_psnr_B = 0
+
+criterion = torch.nn.MSELoss()
 
 for i, batch in enumerate(dataloader):
     # Set model input
@@ -88,8 +96,26 @@ for i, batch in enumerate(dataloader):
     save_image(fake_A, 'output/A/%04d.png' % (i+1))
     save_image(fake_B, 'output/B/%04d.png' % (i+1))
     
+    #Evaluate ssim
+    ssim_fake_A += pytorch_ssim.ssim(real_A, netG_B2A(real_B))
+    ssim_fake_B += pytorch_ssim.ssim(real_B, netG_A2B(real_A))
+    
+    # Evaluate PSNR
+    mse_A = criterion(netG_B2A(real_B), real_A)
+    psnr_A = 10 * log10(1 / mse_A.item())
+    avg_psnr_A += psnr_A
+    
+    mse_B = criterion(netG_A2B(real_A), real_B)
+    psnr_B = 10 * log10(1 / mse_B.item())
+    avg_psnr_B += psnr_B
 
     sys.stdout.write('\rGenerated images %04d of %04d' % (i+1, len(dataloader)))
+    
+
+print("===> Avg. SSIM fake_A: {:.4f} dB".format(ssim_fake_A / len(dataloader)))
+print("===> Avg. SSIM fake_B: {:.4f} dB".format(ssim_fake_B / len(dataloader)))
+print("===> Avg. PSNR fake_A: {:.4f} dB".format(avg_psnr_A / len(dataloader)))
+print("===> Avg. PSNR fake_B: {:.4f} dB".format(avg_psnr_B / len(dataloader)))
 
 sys.stdout.write('\n')
 ###################################
