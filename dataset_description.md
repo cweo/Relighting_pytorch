@@ -1,4 +1,4 @@
-Scenes distribution:
+Scenes distribution for the dataset https://drive.google.com/file/d/1FdQCDQNjmB4YNV8yZZZgsnidOumfCNfI/view?usp=sharing.
 
 * Train 303:
  * scene_abandonned_city_54
