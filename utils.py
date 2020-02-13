@@ -9,6 +9,8 @@ from visdom import Visdom
 import numpy as np
 from PIL import Image
 
+from color_temp import temperature_to_rgb
+
 def tensor2image(tensor):
     image = 127.5*(tensor[0].cpu().float().numpy() + 1.0)
     if image.shape[0] == 1:
@@ -121,3 +123,13 @@ def get_concat_h(im1, im2, im3, im4):
     concat_tensor = torch.cat((im1, im2, im3, im4), 0)
     return concat_tensor
 
+def change_temp(image, temp1, temp2):
+    rgb1 = temperature_to_rgb(temp1)
+    rgb2 = temperature_to_rgb(temp2)
+    r1, g1, b1 = rgb1[0], rgb1[1], rgb1[2]    
+    r2, g2, b2 = rgb2[0], rgb2[1], rgb2[2]
+    
+    matrix = ( r2 / r1, 0.0, 0.0, 0.0,
+               0.0, g2 / g1, 0.0, 0.0,
+               0.0, 0.0, b2 / b1, 0.0 )
+    return image.convert('RGB', matrix)
