@@ -2,11 +2,6 @@ import argparse
 import sys
 import os
 
-import torchvision.transforms as transforms
-from torchvision.utils import save_image
-from torch.utils.data import DataLoader
-from torch.autograd import Variable
-import torch
 from PIL import Image
 from math import log10
 import numpy as np
@@ -14,23 +9,13 @@ import glob
 
 from utils import change_temp
 from color_temp import temperature_to_rgb
-from models import Generator
-from datasets import ImageDataset
-from utils import get_concat_h
-import pytorch_ssim
-from utils import tensor2image
 from SSIM_PIL import compare_ssim
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--batchSize', type=int, default=1, help='size of the batches')
 parser.add_argument('--temp1', type=int, default=2500, help='original color temperature')
 parser.add_argument('--temp2', type=int, default=4500, help='new color temperature')
 parser.add_argument('--dataroot', type=str, default='datasets/horse2zebra/', help='root directory of the dataset')
-parser.add_argument('--input_nc', type=int, default=3, help='number of channels of input data')
-parser.add_argument('--output_nc', type=int, default=3, help='number of channels of output data')
 parser.add_argument('--size', type=int, default=256, help='size of the data (squared assumed)')
-parser.add_argument('--cuda', action='store_true', help='use GPU computation')
-parser.add_argument('--n_cpu', type=int, default=8, help='number of cpu threads to use during batch generation')
 opt = parser.parse_args()
 print(opt)
 
