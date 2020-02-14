@@ -53,26 +53,75 @@ def append_images(images, direction='horizontal',
 
 if __name__=='__main__':
     # thumbnail1
-    line_1_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', 'real', '*.png')))
+    line_1_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '2500_real', '*.png')))
     line_2_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '4500', '*.png')))
+    line_2bis_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '4500_real', '*.png')))
     line_3_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '4500_linear', '*.png')))
     line_4_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '6500', '*.png')))
+    line_4bis_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '6500_real', '*.png')))
     line_5_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail1', '6500_linear', '*.png')))    
     # Load images
     load_resize = lambda file_path: Image.open(file_path).resize((256,256), Image.BICUBIC)
     images_1 = list(map(load_resize, line_1_files))
     images_2 = list(map(Image.open, line_2_files))
+    images_2bis = list(map(load_resize, line_2bis_files))
     images_3 = list(map(Image.open, line_3_files))
     images_4 = list(map(Image.open, line_4_files))
+    images_4bis = list(map(load_resize, line_4bis_files))
     images_5 = list(map(Image.open, line_5_files))
+    # Conc. horizontal
+    combo_1 = append_images(images_1, direction='horizontal')
+    combo_2 = append_images(images_2, direction='horizontal')
+    combo_2bis = append_images(images_2bis, direction='horizontal')
+    combo_3 = append_images(images_3, direction='horizontal')
+    combo_4 = append_images(images_4, direction='horizontal')
+    combo_4bis = append_images(images_4bis, direction='horizontal')
+    combo_5 = append_images(images_5, direction='horizontal')
+    # Conc. vertical
+    combo_final = append_images([combo_1, combo_2, combo_2bis, combo_3, combo_4, combo_4bis, combo_5], direction='vertical')
+    # Save image
+    combo_final.save(os.path.join('./results/', 'thumbnail1', 'thumbnail1.png'))
+    
+    # thumbnail2
+    line_1_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail2', 'SW_real', '*.png')))
+    line_2_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail2', 'SW_fake', '*.png')))
+    line_3_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail2', 'SE_real', '*.png')))
+    line_4_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail2', 'SE_fake', '*.png')))  
+    # Load images
+    load_resize = lambda file_path: Image.open(file_path).resize((256,256), Image.BICUBIC)
+    images_1 = list(map(load_resize, line_1_files))
+    images_2 = list(map(Image.open, line_2_files))
+    images_3 = list(map(load_resize, line_3_files))
+    images_4 = list(map(Image.open, line_4_files))
     # Conc. horizontal
     combo_1 = append_images(images_1, direction='horizontal')
     combo_2 = append_images(images_2, direction='horizontal')
     combo_3 = append_images(images_3, direction='horizontal')
     combo_4 = append_images(images_4, direction='horizontal')
-    combo_5 = append_images(images_5, direction='horizontal')
     # Conc. vertical
-    combo_final = append_images([combo_1, combo_2, combo_3, combo_4, combo_5], direction='vertical')
+    combo_final = append_images([combo_1, combo_2, combo_3, combo_4], direction='vertical')
     # Save image
-    combo_final.save(os.path.join('./results/', 'thumbnail1', 'thumbnail1.png'))
+    combo_final.save(os.path.join('./results/', 'thumbnail2', 'thumbnail2.png'))
+    
+    # thumbnail3
+    line_1_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail3', '4500_real', '*.png')))
+    line_2_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail3', '6500_cycle', '*.png')))
+    line_3_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail3', '6500_real', '*.png')))
+    line_4_files = sorted(glob.glob(os.path.join('./results/', 'thumbnail3', '6500_linear', '*.png')))  
+    # Load images
+    load_resize = lambda file_path: Image.open(file_path).resize((256,256), Image.BICUBIC)
+    images_1 = list(map(load_resize, line_1_files))
+    images_2 = list(map(Image.open, line_2_files))
+    images_3 = list(map(load_resize, line_3_files))
+    images_4 = list(map(Image.open, line_4_files))
+    # Conc. horizontal
+    combo_1 = append_images(images_1, direction='horizontal')
+    combo_2 = append_images(images_2, direction='horizontal')
+    combo_3 = append_images(images_3, direction='horizontal')
+    combo_4 = append_images(images_4, direction='horizontal')
+    # Conc. vertical
+    combo_final = append_images([combo_1, combo_2, combo_3, combo_4], direction='vertical')
+    # Save image
+    combo_final.save(os.path.join('./results/', 'thumbnail3', 'thumbnail3.png'))
+        
         
