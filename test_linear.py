@@ -54,11 +54,18 @@ if __name__== '__main__':
         ssim_fake_B += compare_ssim(real_B, fake_B)
 
         # Evaluate PSNR
-        mse_A = np.square(np.array(real_A) - np.array(fake_A)).mean(axis=None)
+        old_min = 0
+        old_max = 255
+        new_min = 0
+        new_max = 1
+        convert_RGB_2_float = lambda array: array*(new_max - new_min)/(old_max-old_min)
+    
+        mse_A = ((convert_RGB_2_float(np.array(real_A)) - convert_RGB_2_float(np.array(fake_A)))**2).mean()
         psnr_A = 10 * log10(1 / mse_A)
+        #print(mse_A, " || ", psnr_A)
         avg_psnr_A += psnr_A
 
-        mse_B = np.square(np.array(real_B) - np.array(fake_B)).mean(axis=None)
+        mse_B = ((convert_RGB_2_float(np.array(real_B)) - convert_RGB_2_float(np.array(fake_B)))**2).mean()
         psnr_B = 10 * log10(1 / mse_B)
         avg_psnr_B += psnr_B
 
