@@ -26,6 +26,11 @@ To generate datasets yourself using Unreal Engine 4, please download our Unreal 
 Please find bellow a sample of images generated from the codes.
 ![thumbnail of result images](https://github.com/cweo/Relighting_pytorch/blob/master/results/thumbnail1/thumbnail1.png "Qualitative analysis of relighting using CycleGAN and linear models")
 
+1st row: 2500K real images generated using Unreal Engine 4, 2nd row: images generated using a CycleGAN model to transfer
+from 2500K real images to 4500K, 3rd row: 4500K real images generated using Unreal Engine 4, 4th row: images generated using a linear
+model to transfer from 2500K real images to 4500K, 5th row: images generated using a CycleGAN model
+to transfer from 2500K real images to 6500K, 6th row: 6500K real images generated using Unreal Engine 4, 7th row: images generated using
+a linear model to transfer from 2500K real images to 6500K.
 
 ### Running experiments
 
