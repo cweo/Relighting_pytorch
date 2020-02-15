@@ -15,6 +15,7 @@ This is a Python implementation for the Semester Project [report](https://github
 * torchvision 0.4.2
 * visdom
 * SSIM-PIL
+
 To run our Unreal Engine 4 code:
 * Unreal Engine 4 4.23.1
 
