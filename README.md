@@ -6,7 +6,17 @@ This is a Python implementation for the Semester Project [report](https://github
 
 ## Codes
 
-
+### Dependencies
+* Python 3.6.10
+* PIL
+* pandas
+* shutil
+* torch 1.3.1
+* torchvision 0.4.2
+* visdom
+* SSIM-PIL
+To run our Unreal Engine 4 code:
+* Unreal Engine 4 4.23.1
 
 
 We base our CycleGAN implementation on https://github.com/aitorzip/PyTorch-CycleGAN. We modified it to make it usable for our dataset.
