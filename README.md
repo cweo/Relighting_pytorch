@@ -19,6 +19,19 @@ This is a Python implementation for the Semester Project [report](https://github
 To run our Unreal Engine 4 code:
 * Unreal Engine 4 4.23.1
 
+### Unreal Engine 4 data generation
+To generate datasets yourself using Unreal Engine 4, please download our Unreal Engine 4 project [here](https://drive.google.com/file/d/1-iasuvNbfMIPMf1--qrFl0sGykMx8bNE/view?usp=sharing) and refer to our report's appendix for detailed instructions on how to run it.
+
+### Results
+Please find bellow a sample of images generated from the codes.
+![thumbnail of result images](https://github.com/cweo/Relighting_pytorch/blob/master/results/thumbnail1/thumbnail1.png "Qualitative analysis of relighting using CycleGAN and linear models")
+
+
+### Running experiments
+
+
+
+
 
 We base our CycleGAN implementation on https://github.com/aitorzip/PyTorch-CycleGAN. We modified it to make it usable for our dataset.
 We also developed tools to prepare our dataset that is available at https://drive.google.com/open?id=1FdQCDQNjmB4YNV8yZZZgsnidOumfCNfI that we generated using Unreal Engine 4.
