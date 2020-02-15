@@ -1,6 +1,7 @@
 # Relighting pytorch
 
 Johan Barthas, Ruofan Zhou, Majed El Helou and Sabine Süsstrunk.
+
 This is a Python implementation for the Semester Project [report](https://github.com/cweo/Relighting_pytorch/blob/master/report/Semester_project_report.pdf).
 
 ## Codes
