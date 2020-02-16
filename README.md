@@ -35,7 +35,7 @@ a linear model to transfer from 2500K real images to 6500K.
 ### Running experiments
 We describe here how to use our code.
 #### Step 1: Download our dataset
-Please download our dataset [here](https://drive.google.com/open?id=1FdQCDQNjmB4YNV8yZZZgsnidOumfCNfI).
+Please contact us to get an access to the dataset.
 #### Step 2: Check the completeness of our dataset (Optional)
 If you want to be sure that your dataset is complete, use the notebook ```completeness_test.ipynb``` and adapt the path to the different scene folders.
 #### Step 3: Hierarchize the dataset
